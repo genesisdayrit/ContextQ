@@ -1,9 +1,11 @@
 from flask import Flask, request
+from flask_cors import CORS
 import openai
 import os
 from dotenv import load_dotenv
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS
 
 load_dotenv()  # take environment variables from .env.
 openai.api_key = os.getenv('OPENAI_API_KEY')  # replace with your actual key
