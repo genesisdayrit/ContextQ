@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 app = Flask(__name__)
 CORS(app)  # Enable CORS
 
-load_dotenv()  # take environment variables from .env.
-openai.api_key = os.getenv('OPENAI_API_KEY')  # replace with your actual key
+load_dotenv()
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 @app.route('/api/generate-response', methods=['POST'])
 def generate_response():
