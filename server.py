@@ -15,10 +15,14 @@ def generate_response():
     data = request.get_json()
 
     prompt = data['prompt']
-    response = openai.Completion.create(engine="text-davinci-004", prompt=prompt, max_tokens=60)
+    response = openai.Completion.create(engine="text-davinci-003", prompt=prompt, max_tokens=120)
+
+    print(response)  # Print the complete response for debugging
+
     response_text = response.choices[0].text.strip()
 
     return {'response': response_text}
 
 if __name__ == "__main__":
-    app.run(port=5000)
+    app.run(port=5000, debug=True)
+

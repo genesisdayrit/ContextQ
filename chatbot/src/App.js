@@ -1,26 +1,31 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 function App() {
-  const [prompt, setPrompt] = useState('');
-  const [response, setResponse] = useState('');
-
-  const handleChange = (event) => {
-    setPrompt(event.target.value);
-  };
+  const [prompt, setPrompt] = useState("");
+  const [response, setResponse] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: prompt })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt }),
     };
 
-    const apiResponse = await fetch('http://localhost:5000/api/generate-response', requestOptions);
-    const data = await apiResponse.json();
+    try {
+      const res = await fetch("http://localhost:5000/api/generate-response", requestOptions);
 
-    setResponse(data.response);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const data = await res.json();
+      setResponse(data.response);
+    } catch (error) {
+      setError(`Fetch error: ${error.message}`);
+    }
   };
 
   return (
@@ -28,11 +33,17 @@ function App() {
       <form onSubmit={handleSubmit}>
         <label>
           Prompt:
-          <input type="text" value={prompt} onChange={handleChange} />
+          <input
+            type="text"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+          />
         </label>
-        <input type="submit" value="Submit" />
+        <button type="submit">Submit</button>
       </form>
-      <div>{response}</div>
+
+      {error && <p>Error: {error}</p>}
+      <p>Response: {response}</p>
     </div>
   );
 }
