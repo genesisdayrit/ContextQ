@@ -1,9 +1,12 @@
 from flask import Flask, request
 import openai
+import os
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 
-openai.api_key = 'your-api-key'  # replace with your actual key
+load_dotenv()  # take environment variables from .env.
+openai.api_key = os.getenv('OPENAI_API_KEY')  # replace with your actual key
 
 @app.route('/api/generate-response', methods=['POST'])
 def generate_response():
